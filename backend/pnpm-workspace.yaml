@@ -1,0 +1,6 @@
+# Seguridad supply-chain: no instalar versiones publicadas hace menos de 1 día (valor en minutos)
+minimumReleaseAge: 1440
+
+allowBuilds:
+  bcrypt: true
+  esbuild: true

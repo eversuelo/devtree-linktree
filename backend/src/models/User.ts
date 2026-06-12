@@ -1,23 +1,31 @@
 import mongoose, { Model, Schema } from "mongoose";
 
 export interface IUser {
+  handle: string;
   username: string;
   email: string;
   password: string;
 }
+
 const userSchema = new Schema({
-  username: {
+  handle: {
     type: String,
     required: true,
     unique: true,
+    trim: true,
+    lowercase: true,
+  },
+  name: {
+    type: String,
+    required: true,
     trim: true,
   },
   email: {
     type: String,
     required: true,
     unique: true,
-    lowercase: true,
     trim: true,
+    lowercase: true
   },
   password: {
     type: String,
