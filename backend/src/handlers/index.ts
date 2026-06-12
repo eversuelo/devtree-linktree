@@ -1,15 +1,10 @@
 import User from "../models/User";
-import slug from "slug";
 import { Request, Response } from "express";
 import { hashPassword, comparePassword } from "../utils/auth";
+import { generateJWT } from "../utils/jwt";
 const createAccount = async (req: Request, res: Response) => {
-    const { email, password, handle } = req.body;
-    const userExistEmail = await User.findOne({ email });
-    const userExistHandle = await User.findOne({ handle });
-    if (userExistEmail || userExistHandle) {
-        return res.status(400).json({ message: 'El usuario ya existe' });
-    }
-    const user = new User({ ...req.body, password: await hashPassword(password), handle: slug(handle) });
+    const { password } = req.body;
+    const user = new User({ ...req.body, password: await hashPassword(password) });
     await user.save();
     return res.status(201).json({ message: 'Usuario creado exitosamente' });
 }
@@ -24,7 +19,12 @@ const login = async (req: Request, res: Response) => {
     if (!isPasswordCorrect) {
         return res.status(401).json({ message: 'La contraseña es incorrecta' });
     }
-    return res.status(200).json({ message: 'Autenticado correctamente' });
+    const token = generateJWT({ id: user._id.toString() });
+    return res.status(200).json({ token });
 }
 
-export { createAccount, login }
+const getUser = async (req: Request, res: Response) => {
+    return res.status(200).json(req.user);
+}
+
+export { createAccount, login, getUser }

@@ -2,7 +2,7 @@ import mongoose, { Model, Schema } from "mongoose";
 
 export interface IUser {
   handle: string;
-  username: string;
+  name: string;
   email: string;
   password: string;
 }
